@@ -1,0 +1,38 @@
+version: '3' # กำหนด docker version
+services:
+  app: # ตั้งชื่อ container (เหมือน --name)
+    container_name: app
+    # restart: always
+    build: . # ตำแหน่ง dockerfile
+    ports:
+      - "3000:3000" # map port ออกมา เหมือน -p ใน docker run 
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/mydb
+      - POSTGRES_URI=postgresql://postgres:password@postgre:5432/mydb
+    depends_on:
+      - mongo
+      - postgres
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  mongo_data: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
+  postgres_data: 
