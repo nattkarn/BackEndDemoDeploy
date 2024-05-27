@@ -8,9 +8,9 @@ const app = express()
 
 // console.log('MONGODB_URI:',process.env.MONGODB_URI)
 // console.log('POSTGRES_URI:',process.env.POSTGRES_URI)
-const url = 'mongodb+srv://nattkarn:QT2SvoNO0p3GuJwT@clustermongo.kbhh4ny.mongodb.net/mydb'
+// const url = 'mongodb+srv://nattkarn:QT2SvoNO0p3GuJwT@clustermongo.kbhh4ny.mongodb.net/mydb'
 mongoose
-  .connect(url, { useNewUrlParser: true })
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log(`Connected to MongoDB`);
   })

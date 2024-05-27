@@ -1,38 +1,71 @@
-const express = require('express')
-const mongoose = require('mongoose')
+const express = require('express');
+const mongoose = require('mongoose');
 
-const router = express.Router()
+const router = express.Router();
 
 const User = mongoose.model('User', {
     name: String,
     email: String
-})
+});
 
-router.post('/users', async (req,res) => {
-    const user = new User(req.body)
-    await user.save()
-    res.send(user)
-}) 
+// Create a new user
+router.post('/users', async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).send(user);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
 
-router.get('/users', async (req,res) => {
-    const user = new User.find()
-    res.send(user)
-}) 
+// Get all users
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.send(users);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
-router.get('/users/:id', async (req,res) => {
-    const user = new User.findById(req.params.id)
-    res.send(user)
-}) 
+// Get user by ID
+router.get('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).send();
+        }
+        res.send(user);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
-router.put('/users/:id', async (req,res) => {
-    const user = new User.findByIdAndUpdate(req.params.id, req.body, {new:true})
-    res.send(user)
-}) 
+// Update user by ID
+router.patch('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!user) {
+            return res.status(404).send();
+        }
+        res.send(user);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
 
-router.delete('/users/:id', async (req,res) => {
-    const user = new User.findByIdAndDelete(req.params.id)
-    res.sendStatus(200)
-}) 
+// Delete user by ID
+router.delete('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) {
+            return res.status(404).send();
+        }
+        res.sendStatus(200);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
-
-module.exports = router
+module.exports = router;

@@ -7,8 +7,13 @@ services:
     ports:
       - "3000:3000" # map port ออกมา เหมือน -p ใน docker run 
     environment:
-      - MONGODB_URI=mongodb://mongo:27017/mydb
-      - POSTGRES_URI=postgresql://postgres:password@postgre:5432/mydb
+      # local run by docker
+      # - MONGODB_URI=mongodb://mongo:27017/mydb
+      # - POSTGRES_URI=postgresql://postgres:password@postgres:5432/mydb
+
+
+      - MONGODB_URI=mongodb+srv://nattkarn:QT2SvoNO0p3GuJwT@clustermongo.kbhh4ny.mongodb.net/mydb 
+      - POSTGRES_URI=postgres://postgres.suzlrmkgrnnsdiutmjrl:QT2SvoNO0p3GuJwT@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
     depends_on:
       - mongo
       - postgres
